@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from zlib import crc32
 import numpy as np
 from sklearn.impute import SimpleImputer
-
+from sklearn.preprocessing import OrdinalEncoder
 
 def load_housing_data():
     tarball_path = Path("datasets/housing.tgz")
@@ -94,8 +94,16 @@ imputer = SimpleImputer(strategy="median")
 housing_num = housing.select_dtypes(include=[np.number])
 imputer.fit(housing_num)
 
-print(imputer.statistics_)
-print(housing_num.median().values)
+#print(imputer.statistics_)
+#print(housing_num.median().values)
 
 X = imputer.transform(housing_num)
 
+housing_tr = pd.DataFrame(X, columns=housing_num.columns, index=housing_num.index)
+print (X)
+print(housing_tr)
+
+housing_cat = housing[["ocean_proximity"]]
+ordinal_encoder = OrdinalEncoder()
+housing_cat_encoded = ordinal_encoder.fit_transform(housing_cat)
+print(housing_cat_encoded)
